@@ -17,4 +17,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Login" parent="Lock.Theme">
+        <item name="Auth0.HeaderLogo">@drawable/logo_transparent</item>
+        <item name="Auth0.HeaderTitle">@string/app_name</item>
+        <item name="Auth0.HeaderTitleColor">@color/colorPrimary</item>
+        <item name="Auth0.HeaderBackground">@color/com_auth0_lock_header_background</item>
+        <item name="Auth0.PrimaryColor">@color/colorPrimary</item>
+        <item name="Auth0.DarkPrimaryColor">@color/colorPrimaryDark</item>
+    </style>
+
 </resources>
