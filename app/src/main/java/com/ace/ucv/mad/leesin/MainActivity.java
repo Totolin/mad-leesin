@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ace.ucv.mad.leesin.dtb.SongSearchDAO;
 import com.auth0.android.Auth0;
 import com.auth0.android.lock.AuthenticationCallback;
 import com.auth0.android.lock.Lock;
@@ -46,6 +47,9 @@ public class MainActivity extends YouTubeBaseActivity implements
     private TextView songInfo;
     private TextView songValues;
 
+    // Databse
+    private SongSearchDAO songSearchDAO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +70,10 @@ public class MainActivity extends YouTubeBaseActivity implements
         songSearchField = (EditText)findViewById(R.id.songsearch);
         songInfo = (TextView)findViewById(R.id.songinfo);
         songValues = (TextView)findViewById(R.id.songvalues);
+
+        // Databse
+        songSearchDAO = new SongSearchDAO(this);
+        songSearchDAO.open();
 
         // Initial reset
         resetSongInfo();
@@ -175,7 +183,12 @@ public class MainActivity extends YouTubeBaseActivity implements
         String songName = songSearchField.getText().toString();
         SongInfo info = this.spotifyManager.getSongInfo(songName);
         if (info != null) {
+            // Set UI info
             setSongInfo(info);
+
+            // Save to database
+            songSearchDAO.createComment(songName);
+
             new Requester(this, songName).execute();
         }
     }
