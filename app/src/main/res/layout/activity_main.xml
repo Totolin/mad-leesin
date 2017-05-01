@@ -8,7 +8,7 @@
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/snake_bg" />
+        android:src="@drawable/sl08" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -23,6 +23,32 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded"
             android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_marginBottom="30dp">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:id="@+id/songsearch"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_weight="0.04"
+            android:orientation="horizontal"
+            />
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight="0.3"
+            android:onClick="searchClick"
+            android:src="@drawable/com_auth0_lock_ic_chevron_submit"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded"
+            android:gravity="center_horizontal"
             android:orientation="vertical" >
 
             <com.google.android.youtube.player.YouTubePlayerView
@@ -31,37 +57,75 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="70dp"
-                android:layout_marginBottom="20dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/nat_geo_logo" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/title_logo"
-                android:textColor="@color/title"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginBottom="30dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginBottom="30dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/wild" />
+                <TextView
+                    android:id="@+id/songinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/title"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"/>
+
+                <TextView
+                    android:id="@+id/songvalues"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/title"
+                    android:textSize="12sp"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
-        <Button
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
             android:background="@drawable/rounded"
-            android:text="@string/btn_skip_intro"
-            android:onClick="buttonClick"/>
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageButton
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_weight="0.3"
+                android:onClick="mediaPlay"
+                android:src="@drawable/ic_play_arrow_black_24dp"/>
+
+            <ImageButton
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_weight="0.3"
+                android:onClick="mediaPause"
+                android:src="@drawable/ic_pause_black_24dp"/>
+
+            <ImageButton
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_weight="0.3"
+                android:onClick="mediaStop"
+                android:src="@drawable/ic_stop_black_24dp"/>
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

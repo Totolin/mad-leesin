@@ -1,5 +1,6 @@
 package com.ace.ucv.mad.leesin;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import android.content.Intent;
@@ -7,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auth0.android.Auth0;
@@ -19,9 +23,10 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import java.text.DecimalFormat;
 
 public class MainActivity extends YouTubeBaseActivity implements
-        YouTubePlayer.OnInitializedListener {
+        YouTubePlayer.OnInitializedListener, IRequester {
 
     private static final int RECOVERY_DIALOG_REQUEST = 1;
 
@@ -31,6 +36,15 @@ public class MainActivity extends YouTubeBaseActivity implements
 
     // Authentication lock
     private Lock lock;
+    private String currentVideo;
+
+    // Spotify api manager
+    private SpotifyManager spotifyManager;
+
+    // Ui Elements
+    private EditText songSearchField;
+    private TextView songInfo;
+    private TextView songValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +58,17 @@ public class MainActivity extends YouTubeBaseActivity implements
         initializeYoutubeAPI();
 
         showAuthenticator();
+
+        // Spotify Manager
+        spotifyManager = new SpotifyManager();
+
+        // Initialize UI components
+        songSearchField = (EditText)findViewById(R.id.songsearch);
+        songInfo = (TextView)findViewById(R.id.songinfo);
+        songValues = (TextView)findViewById(R.id.songvalues);
+
+        // Initial reset
+        resetSongInfo();
     }
 
     private void showAuthenticator() {
@@ -60,6 +85,7 @@ public class MainActivity extends YouTubeBaseActivity implements
 
         // Initializing video player with developer key
         youTubeView.initialize(Config.DEVELOPER_KEY, this);
+
     }
 
     private LockCallback callback = new AuthenticationCallback() {
@@ -98,11 +124,6 @@ public class MainActivity extends YouTubeBaseActivity implements
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
-
-            // loadVideo() will auto play video
-            // Use cueVideo() method, if you don't want to play it automatically
-            player.loadVideo(Config.YOUTUBE_VIDEO_CODE);
-
             // Hiding player controls
             player.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
 
@@ -123,7 +144,61 @@ public class MainActivity extends YouTubeBaseActivity implements
         return (YouTubePlayerView) findViewById(R.id.youtube_view);
     }
 
-    public void buttonClick(View view) {
-        this.mPlayer.pause();
+    private void resetSongInfo() {
+        songInfo.setText("Name:\nMusicalness:\nInstrumentalness:\nEnergy:\nSpeechiness\nLoudness");
+        songValues.setText("....\n....\n....\n....\n....\n....");
+    }
+
+    private void setSongInfo(SongInfo info) {
+        DecimalFormat numberFormat = new DecimalFormat("0.00");
+
+        songValues.setText (info.getName() + '\n'
+                        + numberFormat.format(info.getMusicalness()) + '\n'
+                        + numberFormat.format(info.getInstrumentalness()) + '\n'
+                        + numberFormat.format(info.getEnergy()) + '\n'
+                        + numberFormat.format(info.getSpeechiness()) + '\n'
+                        + numberFormat.format(info.getLoudness())
+        );
+    }
+    public void searchClick(View view) {
+        // Hide keyboard
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+
+        // Reset info displayed
+        resetSongInfo();
+
+        // Request song
+        String songName = songSearchField.getText().toString();
+        SongInfo info = this.spotifyManager.getSongInfo(songName);
+        if (info != null) {
+            setSongInfo(info);
+            new Requester(this, songName).execute();
+        }
+    }
+
+    public void mediaPlay(View view) {
+        mPlayer.play();
+    }
+
+    public void mediaPause(View view) {
+        mPlayer.pause();
+    }
+
+    public void mediaStop(View view) {
+        mPlayer.loadVideo(currentVideo);
+        mPlayer.pause();
+    }
+
+    @Override
+    public void requestCallback(String videoID) {
+        if (videoID != null) {
+            // Load song in player
+            currentVideo = videoID;
+            mPlayer.loadVideo(videoID);
+        }
     }
 }

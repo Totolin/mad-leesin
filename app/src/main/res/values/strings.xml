@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">LeeSin</string>
-    <string name="title_logo">NATIONAL GEOGRAPHIC</string>
+    <string name="title_logo">NATIONAL GEOGRAPHIC\nasdf\nasdf</string>
     <string name="btn_skip_intro">Skip Intro</string>
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
     <string name="username">Username</string>
